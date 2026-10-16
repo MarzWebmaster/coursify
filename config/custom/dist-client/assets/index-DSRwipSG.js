@@ -1,0 +1,6 @@
+import{p as d,j as e,B as r,i as l}from"./index-CdRPss5l.js";import{C as h}from"./Checkbox-DXAJyL4o.js";import{M as t}from"./Menu-BNJe7ysa.js";/**
+ * @license @tabler/icons-react v3.35.0 - MIT
+ *
+ * This source code is licensed under the MIT license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const c=[["path",{d:"M4 6l5.5 0",key:"svg-0"}],["path",{d:"M4 10l5.5 0",key:"svg-1"}],["path",{d:"M4 14l5.5 0",key:"svg-2"}],["path",{d:"M4 18l5.5 0",key:"svg-3"}],["path",{d:"M14.5 6l5.5 0",key:"svg-4"}],["path",{d:"M14.5 10l5.5 0",key:"svg-5"}],["path",{d:"M14.5 14l5.5 0",key:"svg-6"}],["path",{d:"M14.5 18l5.5 0",key:"svg-7"}]],g=d("outline","columns","Columns",c);function x({table:o}){const n=o.getAllLeafColumns().filter(s=>s.getCanHide());return n.length===0?null:e.jsxs(t,{shadow:"md",width:200,closeOnItemClick:!1,children:[e.jsx(t.Target,{children:e.jsx(r,{size:"xs",variant:"light",leftSection:e.jsx(g,{size:16}),children:l._({id:"jEu4bB"})})}),e.jsxs(t.Dropdown,{children:[e.jsx(t.Label,{children:l._({id:"W428WC"})}),n.map(s=>{const i=s.columnDef,a=typeof i.header=="string"?i.header:i.id||s.id;return e.jsx(t.Item,{children:e.jsx(h,{checked:s.getIsVisible(),onChange:s.getToggleVisibilityHandler(),label:a})},s.id)})]})]})}export{x as C};

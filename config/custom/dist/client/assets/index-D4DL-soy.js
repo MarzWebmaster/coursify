@@ -1,0 +1,1 @@
+import{j as n}from"./index-CdRPss5l.js";const s="_main_yehqw_1",a="_innerContainer_yehqw_33",e={main:s,innerContainer:a},r=({children:i})=>n.jsx("main",{className:e.main,children:n.jsx("div",{className:e.innerContainer,children:i})});export{r as C};

@@ -1,0 +1,1 @@
+import{g as a,D as l,b as d}from"./themeUtils-CtJ__vKm.js";const m="hi-homepage-font-",s=o=>{const n=a(o);if(n.value===l)return;const t=m+n.bunnyFamily;if(document.getElementById(t))return;const e=document.createElement("link");e.id=t,e.rel="stylesheet",e.href=d(n.value),document.head.appendChild(e)};export{s as e};

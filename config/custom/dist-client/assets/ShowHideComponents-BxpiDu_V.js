@@ -1,0 +1,1 @@
+import{j as t}from"./index-CdRPss5l.js";import{u as s}from"./useWindowWidth-ClTzULo1.js";const r={md:768},m=({children:o})=>s()>r.md?t.jsx(t.Fragment,{children:o}):null,d=({children:o})=>s()<=r.md?t.jsx(t.Fragment,{children:o}):null;export{d as S,m as a};

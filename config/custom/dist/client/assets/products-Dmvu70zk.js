@@ -1,0 +1,1 @@
+import{P as c}from"./types-DhKMSwj5.js";const s=(r,t)=>{var i;if(t.type!==c.Tiered)return t.title;const e=(i=t.prices)==null?void 0:i.find(n=>n.id===r.product_price_id);return t.title+(e!=null&&e.label?` - ${e.label}`:"")},l=(r,t)=>{var i;const e=(i=t.prices)==null?void 0:i.find(n=>n.id===r.product_price_id);return(e==null?void 0:e.price)??0};export{l as a,s as g};

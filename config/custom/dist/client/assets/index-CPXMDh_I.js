@@ -1,0 +1,1 @@
+import{j as s}from"./index-CdRPss5l.js";const r="_wrapper_cmu9i_1",a="_emoji_cmu9i_6",e={wrapper:r,emoji:a},m=({emoji:o,size:i=48})=>s.jsx("div",{className:e.wrapper,style:{fontSize:i},children:s.jsx("span",{className:e.emoji,children:o})});export{m as B};

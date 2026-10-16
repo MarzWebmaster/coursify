@@ -1,0 +1,1 @@
+function i(n,e){if(typeof n=="number")return e.length===n;const{max:r,min:t}=n;let f=!0;return typeof r=="number"&&e.length>r&&(f=!1),typeof t=="number"&&e.length<t&&(f=!1),f}function o(n,e){const r=e||!0;return t=>typeof t=="string"?i(n,t.trim())?null:r:typeof t=="object"&&t!==null&&"length"in t&&i(n,t)?null:r}export{o as h};

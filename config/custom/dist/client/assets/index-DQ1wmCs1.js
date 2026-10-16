@@ -1,0 +1,1 @@
+import{j as o}from"./index-CdRPss5l.js";const l="_card_hdpo3_1",_="_lightGray_hdpo3_7",r={card:l,lightGray:_,default:"_default_hdpo3_11"},h=({children:s,className:t="",style:d={},variant:a="default",ref:c=null})=>o.jsx("div",{className:`card ${a} ${t} ${r.card} ${r[a]}`,style:d,ref:c,children:s});export{h as C};

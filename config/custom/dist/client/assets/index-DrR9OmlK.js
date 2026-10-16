@@ -1,0 +1,1 @@
+import{j as s}from"./index-CdRPss5l.js";const c="_container_184mh_1",o="_title_184mh_5",r="_subheading_184mh_15",e={container:c,title:o,subheading:r},l=n=>{const{children:i,subheading:t,...a}=n;return s.jsxs("div",{className:e.container,children:[s.jsx("h1",{className:e.title,...a,children:i}),t&&s.jsx("div",{className:e.subheading,children:t})]})};export{l as P};

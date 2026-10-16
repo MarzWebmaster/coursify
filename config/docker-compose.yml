@@ -1,0 +1,62 @@
+services:
+  all-in-one:
+    image: daveearley/hi.events-all-in-one:latest
+    container_name: hievents-app
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:8081:80
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://hi-events:REDACTED@postgres:5432/hi-events
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+    volumes:
+      # Coursify full rebrand - all Hi.Events strings renamed
+      - /opt/hievents/custom/dist-client:/app/frontend/dist/client:ro
+      - /opt/hievents/custom/blade/welcome.blade.php:/app/backend/resources/views/welcome.blade.php:ro
+      - /opt/hievents/custom/blade/order-failed.blade.php:/app/backend/resources/views/emails/orders/order-failed.blade.php:ro
+      - /opt/hievents/custom/favicon.ico:/app/backend/public/favicon.ico:ro
+      - /opt/hievents/custom/dist-server:/app/frontend/dist/server:ro
+      - /opt/hievents/custom/backend/config-mail.php:/app/backend/config/mail.php:ro
+      - /opt/hievents/custom/backend/webhook-server.php:/app/backend/config/webhook-server.php:ro
+      - /opt/hievents/custom/backend/scramble.php:/app/backend/config/scramble.php:ro
+      - /opt/hievents/custom/backend/ExportOrganizerReportAction.php:/app/backend/app/Http/Actions/Reports/ExportOrganizerReportAction.php:ro
+
+  redis:
+    image: redis:7-alpine
+    container_name: hievents-redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - redisdata:/data
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: hievents-db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hi-events -d hi-events"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_DB: hi-events
+      POSTGRES_USER: hi-events
+      POSTGRES_PASSWORD: REDACTED
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+  redisdata:

@@ -1,0 +1,1 @@
+import{j as t,_ as o}from"./index-CdRPss5l.js";import{P as a}from"./Pagination-HyxpP1El.js";const s=i=>{const{marginTop:r,...n}=i;return t.jsx(o,{mt:i.marginTop===void 0?20:i.marginTop,children:t.jsx(a,{hideWithOnePage:!0,...n})})};export{s as P};

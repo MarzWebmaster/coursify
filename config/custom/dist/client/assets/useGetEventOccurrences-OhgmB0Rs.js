@@ -1,0 +1,1 @@
+import{m as c,bo as s}from"./index-CdRPss5l.js";import{e as u}from"./event-occurrence.client-BttcuKcy.js";const n="getEventOccurrences",o=(e,r,a=!0,t={})=>c({queryKey:[n,e,r,t.includeStats??!0],queryFn:async()=>await u.all(e,r,t),placeholderData:s,staleTime:3e4,enabled:!!e&&a});export{n as G,o as u};

@@ -1,0 +1,1 @@
+import{m as e}from"./index-CdRPss5l.js";import{a as n}from"./admin.client-BxnJH9mr.js";const o=["admin","accounts"],r=(t={})=>e({queryKey:[...o,t],queryFn:()=>n.getAllAccounts(t)});export{o as G,r as u};

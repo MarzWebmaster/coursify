@@ -1,0 +1,1 @@
+import{m as a}from"./index-CdRPss5l.js";import{b as i}from"./attendee.client-BMJA-j6E.js";const r="getAttendeePublic",l=(s,n)=>a({queryKey:[r,s,n],queryFn:async()=>{const{data:e}=await i.findByShortId(s,n);return e},refetchOnWindowFocus:!1,retryOnMount:!1,staleTime:0,retry:(e,t)=>{var u;return((u=t==null?void 0:t.response)==null?void 0:u.status)===404?!1:e<3}});export{l as u};

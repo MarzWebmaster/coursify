@@ -1,0 +1,1 @@
+import{q as i,bj as a}from"./index-CdRPss5l.js";import{u as n}from"./useMutation-Drkjbpbf.js";import{G as s}from"./useGetOrganizerSettings-nHBEyJRs.js";const p=()=>{const r=i();return n({mutationFn:({organizerSettings:t,organizerId:e})=>a.partialUpdate(e,t),onSuccess:(t,e)=>{r.invalidateQueries({queryKey:[s,e.organizerId]})}})};export{p as u};

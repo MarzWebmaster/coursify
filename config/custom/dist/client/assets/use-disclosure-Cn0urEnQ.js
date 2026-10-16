@@ -1,0 +1,1 @@
+import{r as l}from"./index-CdRPss5l.js";function C(f=!1,e={}){const[a,c]=l.useState(f),t=l.useCallback(()=>{c(r=>{var u;return r||((u=e.onOpen)==null||u.call(e),!0)})},[e.onOpen]),s=l.useCallback(()=>{c(r=>{var u;return r&&((u=e.onClose)==null||u.call(e),!1)})},[e.onClose]);return[a,{open:t,close:s,toggle:l.useCallback(()=>{a?s():t()},[s,t,a]),set:c}]}export{C as u};

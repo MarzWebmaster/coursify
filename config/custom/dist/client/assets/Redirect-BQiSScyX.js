@@ -1,0 +1,1 @@
+import{o as s,e as o,j as r,N as n}from"./index-CdRPss5l.js";const i=()=>{const{organizerId:t}=s(),a=o(),e=`/manage/organizer/${t}/settings${a.search}#payouts`;return r.jsx(n,{to:e,replace:!0})};export{i as default};

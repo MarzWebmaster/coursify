@@ -1,0 +1,1 @@
+import{u as s}from"./useMutation-Drkjbpbf.js";import{aG as o}from"./index-CdRPss5l.js";const a={sendTicketLookupEmail:async t=>(await o.post("public/ticket-lookup",{email:t})).data,getOrdersByToken:async t=>(await o.get(`public/ticket-lookup/${t}`)).data},p=()=>s({mutationFn:t=>a.sendTicketLookupEmail(t)});export{a as t,p as u};

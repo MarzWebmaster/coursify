@@ -1,0 +1,1 @@
+import{j as n}from"./index-CdRPss5l.js";import{T as a}from"./Tooltip-WndNd4Pd.js";const l=({text:r="",length:s=35,showTooltip:o=!0})=>{if((r==null?void 0:r.length)<=s)return n.jsx(n.Fragment,{children:r});const i=r.length>s?r.substring(0,s)+"...":r;return o?n.jsx(a,{withArrow:!0,label:r,children:n.jsx("span",{children:i})}):n.jsx("span",{title:r,children:i})};export{l as T};

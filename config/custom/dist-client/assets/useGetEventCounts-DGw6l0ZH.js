@@ -1,0 +1,1 @@
+import{m as n,aY as s}from"./index-CdRPss5l.js";const a="getEventCounts",r=t=>n({queryKey:[a,t],queryFn:async()=>{const{data:e}=await s.getEventCounts(t);return e},enabled:!!t});export{a as G,r as u};

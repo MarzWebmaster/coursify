@@ -1,0 +1,1 @@
+import{m as u,aW as R}from"./index-CdRPss5l.js";const n="getOrganizerStats",g=(a,t,e)=>{const r=e==null?void 0:e.startDate,s=e==null?void 0:e.endDate;return u({queryKey:[n,a,t,r,s],enabled:!!a&&!!t&&(!(e!==void 0)||!!r&&!!s),queryFn:async()=>{const{data:d}=await R.getOrganizerStats(a,{currencyCode:t,startDate:r,endDate:s});return d}})};export{g as u};

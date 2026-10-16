@@ -1,0 +1,1 @@
+import{aG as a,aX as o}from"./index-CdRPss5l.js";const r=e=>{if(!e){delete a.defaults.headers.common.Authorization,delete o.defaults.headers.common.Authorization;return}a.defaults.headers.common.Authorization=`Bearer ${e}`,o.defaults.headers.common.Authorization=`Bearer ${e}`};export{r as s};

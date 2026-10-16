@@ -1,0 +1,1 @@
+import{b as r}from"./index-CdRPss5l.js";const n=()=>{const{data:e,isFetched:t}=r();return t&&((e==null?void 0:e.role)==="ADMIN"||(e==null?void 0:e.role)==="SUPERADMIN")},o=()=>{const{data:e,isFetched:t}=r();return t&&(e==null?void 0:e.role)==="SUPERADMIN"};export{o as a,n as u};

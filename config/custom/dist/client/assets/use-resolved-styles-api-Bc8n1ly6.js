@@ -1,0 +1,1 @@
+import{W as i,X as d,Y as l}from"./index-CdRPss5l.js";function a({classNames:e,styles:s,props:o,stylesCtx:t}){const v=i();return{resolvedClassNames:e===void 0?void 0:l({theme:v,classNames:e,props:o,stylesCtx:t||void 0}),resolvedStyles:s===void 0?void 0:d({theme:v,styles:s,props:o,stylesCtx:t||void 0})}}export{a as u};
