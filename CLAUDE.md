@@ -11,7 +11,7 @@
   5. `ssh -i KEY -p 333 -o IdentitiesOnly=yes -o ProxyCommand='nc -X 5 -x localhost:1055 %h %p' claude@100.118.253.110`
 - Guna `setsid` untuk tailscaled; tanpa itu ia mati bila shell tamat.
 - Sambungan melalui DERP (sin) ~250ms; direct tak terbentuk.
-- Permission: arahan SSH mula-mula diblock auto mode classifier; user kena sahkan eksplisit baru jalan.
+- Permission: arahan SSH mula-mula diblock auto mode classifier; user kena sahkan eksplisit baru jalan. Tindakan yang ubah server (recreate container, ubah kredential) juga diblock sehingga user benarkan (tukar permission mode).
 - Jangan simpan nilai key/authkey dalam repo.
 
 ## Servis di greencloud (/opt/hievents)
@@ -21,11 +21,16 @@
 - Repo `config/` = salinan `/opt/hievents` (diverify 2026-10-22: sama, kecuali `DATABASE_URL` dalam compose sengaja `REDACTED`). Backup harian oleh `/usr/local/sbin/coursify-backup.sh`.
 - Permission rule SSH ada dalam `.claude/settings.local.json` (gitignored); classifier auto mode masih boleh block tindakan "Production Deploy" sehingga user sahkan.
 
-## Masalah email verifikasi (2026-10-22)
+## Masalah email verifikasi/jemputan (diselesaikan 2026-10-23)
 
-- Punca: `MAIL_HOST=webmail.coursify.guru` resolve ke IP Cloudflare (proxied) dari dalam container; Cloudflare tak proxy SMTP, jadi sambungan port 587 timeout.
-- Pembetulan: `extra_hosts: ["webmail.coursify.guru:172.21.0.1"]` pada servis `all-in-one` (backup: `docker-compose.yml.bak-20261022-extrahosts`). Postfix jalan di host; sijil TLS (acme.sh, tamat 2026-12-29) ada `webmail.coursify.guru` dalam SAN, jadi pengesahan nama lulus.
-- Disahkan: STARTTLS dari container berjaya. Email ujian sebenar BELUM disahkan.
+Dua punca berturut-turut; kedua-duanya dah dibetulkan dan email dah disahkan sampai.
+
+1. Rangkaian: `MAIL_HOST=webmail.coursify.guru` resolve ke IP Cloudflare (proxied) dari dalam container; Cloudflare tak proxy SMTP, jadi port 587 timeout. Pembetulan: `extra_hosts: ["webmail.coursify.guru:172.21.0.1"]` pada servis `all-in-one` (backup: `docker-compose.yml.bak-20261022-extrahosts`). Postfix jalan di host; sijil TLS (acme.sh, tamat 2026-12-29) ada `webmail.coursify.guru` dalam SAN, jadi pengesahan nama lulus.
+2. Pengesahan: login SASL ditolak (`doveadm auth test` gagal) sebab `MAIL_PASSWORD` dalam `.env` tak sepadan dengan hash `hai@coursify.guru` dalam `/etc/dovecot/users`. Pembetulan: password baru dijana, hash masuk `/etc/dovecot/users`, nilai sama masuk `.env`, container di-recreate. Backup: `/etc/dovecot/users.bak-20261023-022514`, `/opt/hievents/.env.bak-20261023-022514` (mengandungi password lama; padam bila selamat). Login lama (cth Roundcube) untuk akaun ini tak berfungsi lagi.
+
+Nota:
 - `172.21.0.1` ialah gateway network compose; kemas kini kalau subnet berubah.
-- Belum dibetulkan: job gagal tak disimpan sebab ralat `client_encoding "utf8mb4"` ke Postgres (`failed_jobs`).
-- Debug: `sudo -n docker logs hievents-app`, `sudo -n docker exec hievents-app ...`; Postfix log di `/var/log/mail.log`.
+- Postfix hadkan AUTH: `smtpd_client_auth_rate_limit=5` seminit setiap IP. Semua mel app datang dari satu IP dan setiap cubaan guna LOGIN+PLAIN, jadi jangan ulang hantar cepat-cepat masa debug.
+- Belum dibetulkan: job gagal tak disimpan sebab ralat `client_encoding "utf8mb4"` ke Postgres (`failed_jobs`); kegagalan mel akan senyap.
+- `mail.log` ada ratusan kegagalan SASL daripada akaun lain (serangan brute-force dari luar); pertimbang fail2ban.
+- Debug: `sudo -n docker logs hievents-app`, `sudo -n docker exec hievents-app ...`; Postfix log di `/var/log/mail.log`; ujian kredential: `sudo docker exec hievents-app printenv MAIL_PASSWORD | sudo doveadm auth test hai@coursify.guru` (jangan cetak password).
