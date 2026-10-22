@@ -13,3 +13,19 @@
 - Sambungan melalui DERP (sin) ~250ms; direct tak terbentuk.
 - Permission: arahan SSH mula-mula diblock auto mode classifier; user kena sahkan eksplisit baru jalan.
 - Jangan simpan nilai key/authkey dalam repo.
+
+## Servis di greencloud (/opt/hievents)
+
+- Compose: servis `all-in-one` (container `hievents-app`), `postgres`, `redis`. Queue: Redis, worker `queue:work` dalam container.
+- User `claude` tak boleh akses Docker terus; guna `sudo -n docker ...` (sudo tanpa password). Fail `.env` hanya boleh dibaca root.
+- Repo `config/` = salinan `/opt/hievents` (diverify 2026-10-22: sama, kecuali `DATABASE_URL` dalam compose sengaja `REDACTED`). Backup harian oleh `/usr/local/sbin/coursify-backup.sh`.
+- Permission rule SSH ada dalam `.claude/settings.local.json` (gitignored); classifier auto mode masih boleh block tindakan "Production Deploy" sehingga user sahkan.
+
+## Masalah email verifikasi (2026-10-22)
+
+- Punca: `MAIL_HOST=webmail.coursify.guru` resolve ke IP Cloudflare (proxied) dari dalam container; Cloudflare tak proxy SMTP, jadi sambungan port 587 timeout.
+- Pembetulan: `extra_hosts: ["webmail.coursify.guru:172.21.0.1"]` pada servis `all-in-one` (backup: `docker-compose.yml.bak-20261022-extrahosts`). Postfix jalan di host; sijil TLS (acme.sh, tamat 2026-12-29) ada `webmail.coursify.guru` dalam SAN, jadi pengesahan nama lulus.
+- Disahkan: STARTTLS dari container berjaya. Email ujian sebenar BELUM disahkan.
+- `172.21.0.1` ialah gateway network compose; kemas kini kalau subnet berubah.
+- Belum dibetulkan: job gagal tak disimpan sebab ralat `client_encoding "utf8mb4"` ke Postgres (`failed_jobs`).
+- Debug: `sudo -n docker logs hievents-app`, `sudo -n docker exec hievents-app ...`; Postfix log di `/var/log/mail.log`.
