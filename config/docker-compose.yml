@@ -2,6 +2,8 @@ services:
   all-in-one:
     image: daveearley/hi.events-all-in-one:latest
     container_name: hievents-app
+    extra_hosts:
+      - "webmail.coursify.guru:172.21.0.1"
     restart: unless-stopped
     ports:
       - 127.0.0.1:8081:80
