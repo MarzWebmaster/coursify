@@ -34,3 +34,8 @@ Nota:
 - Belum dibetulkan: job gagal tak disimpan. Punca (disahkan): `config/queue.php` guna `'database' => env('DB_CONNECTION','mysql')` dan `DB_CONNECTION` tak ditetapkan dalam container, jadi guna sambungan `mysql` (charset utf8mb4) ke Postgres. Pembetulan dirancang: tambah `DB_CONNECTION=pgsql` pada `environment` servis `all-in-one` dalam compose (default `config/database.php` memang `pgsql`), recreate, sahkan dengan `php artisan queue:failed`.
 - fail2ban dah ada (jail `postfix-sasl`, `postfix-rbl`, `sshd`; maxretry=3, findtime=600) tapi Total banned = 0 walaupun 1000+ kegagalan SASL/hari: penyerang guna kadar perlahan (~19 cubaan/IP/hari) di bawah ambang, dan `ignoreip` tak termasuk subnet Docker (`172.16.0.0/12`). `fail2ban-regex` tak dipasang, jadi penapis belum diuji. Cadangan: `findtime=86400`, `maxretry=5`, tambah `172.16.0.0/12` pada ignoreip (kekalkan `127.0.0.1/8 ::1 161.142.124.0/24`), `fail2ban-client reload`.
 - Debug: `sudo -n docker logs hievents-app`, `sudo -n docker exec hievents-app ...`; Postfix log di `/var/log/mail.log`; ujian kredential: `sudo docker exec hievents-app printenv MAIL_PASSWORD | sudo doveadm auth test hai@coursify.guru` (jangan cetak password).
+
+## MCP (mcp/)
+
+- `mcp/` = MCP server TypeScript untuk CRUD event dan peserta melalui REST API Hi.Events (login `auth/login`, token Bearer; setiap pengguna guna akaun Coursify sendiri). Lihat `mcp/README.md`; `npm test` guna mock, belum diuji lawan API sebenar.
+- Endpoint dipetakan dari `php artisan route:list --json` di server (URI tanpa awalan `api/`; nginx tambah `/api`). Peraturan validasi: `app/Http/Request/{Event,Attendee}/*` dan `app/Validators/EventRules.php` dalam container.
