@@ -39,3 +39,4 @@ Nota:
 
 - `mcp/` = MCP server TypeScript untuk CRUD event dan peserta melalui REST API Hi.Events (login `auth/login`, token Bearer; setiap pengguna guna akaun Coursify sendiri). Lihat `mcp/README.md`; `npm test` guna mock, belum diuji lawan API sebenar.
 - Endpoint dipetakan dari `php artisan route:list --json` di server (URI tanpa awalan `api/`; nginx tambah `/api`). Peraturan validasi: `app/Http/Request/{Event,Attendee}/*` dan `app/Validators/EventRules.php` dalam container.
+- `.mcp.json` di akar repo mendaftarkan MCP `coursify` (baca sahaja secara lalai; `COURSIFY_READ_ONLY=false` untuk tulis). Perlu env `COURSIFY_EMAIL` dan `COURSIFY_PASSWORD` dalam environment cloud sebelum session bermula.

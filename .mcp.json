@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "coursify": {
+      "command": "sh",
+      "args": [
+        "-c",
+        "cd mcp && { [ -f dist/index.js ] || { npm ci --silent && npm run build --silent; } >&2; } && exec node dist/index.js"
+      ],
+      "env": {
+        "COURSIFY_EMAIL": "${COURSIFY_EMAIL}",
+        "COURSIFY_PASSWORD": "${COURSIFY_PASSWORD}",
+        "COURSIFY_URL": "${COURSIFY_URL:-https://coursify.guru}",
+        "COURSIFY_READ_ONLY": "${COURSIFY_READ_ONLY:-true}"
+      }
+    }
+  }
+}

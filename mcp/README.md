@@ -58,6 +58,14 @@ Atau dalam `.mcp.json` (Claude Code mengembangkan `${VAR}` daripada persekitaran
 
 **Cadangan penggunaan pertama:** mulakan dengan `COURSIFY_READ_ONLY=true`, sahkan data kelihatan betul, kemudian hidupkan tulis.
 
+## Dalam session cloud Claude Code (cara paling mudah untuk pasukan)
+
+Fail `.mcp.json` di akar repo mendaftarkan `coursify` secara automatik. Ia pasang dan bina sendiri pada kali pertama.
+1. Dalam tetapan environment cloud (menu environment di bar tajuk session, kemudian Edit), tambah `COURSIFY_EMAIL` dan `COURSIFY_PASSWORD` sebagai secret. Jangan tampal dalam chat.
+2. Mulakan session **baharu** (pembolehubah hanya dibaca bila session mula) dan luluskan pelayan `coursify` bila diminta.
+3. Lalai ialah **baca sahaja**. Untuk benarkan ubah, tambah `COURSIFY_READ_ONLY=false`.
+4. Nota: satu environment dikongsi bermakna semua yang guna environment itu bertindak sebagai satu akaun Coursify. Untuk jejak audit yang betul, setiap orang guna environment sendiri.
+
 ## Ujian
 
 `npm test` menjalankan MCP sebenar (stdio) terhadap pelayan Coursify **palsu**: pengesahan dan login semula bila token tamat, payload setiap tool, `confirm` pada padam, mod baca sahaja, dan paparan ralat API. Ia **tidak** menyentuh pelayan sebenar.
