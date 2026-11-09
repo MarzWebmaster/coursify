@@ -7,3 +7,5 @@ Daily backup of coursify.guru (Hi.Events on greencloud, /opt/hievents), by /usr/
 
 Decrypt: gpg --decrypt encrypted/hi-events.sql.gz.gpg | gunzip > hi-events.sql
 Restore: cat hi-events.sql | docker exec -i hievents-db psql -U <user> -d hi-events
+
+Panduan menggunakan Claude untuk urus event Coursify: [PANDUAN-MCP.md](PANDUAN-MCP.md)
