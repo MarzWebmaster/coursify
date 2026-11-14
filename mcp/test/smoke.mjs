@@ -35,6 +35,10 @@ const srv = http.createServer((req, res) => {
     if (req.method === "POST" && p === "events/7/attendees") return send(201, { data: { id: 9, ...body } });
     if (req.method === "PATCH" && p === "events/7/attendees/3") return send(200, { data: { ...attendee, ...body } });
     if (req.method === "PUT" && p === "events/7/attendees/3") return send(200, { data: body });
+    if (req.method === "GET" && p === "events/7/product-categories") return send(200, { data: [{ id: 5, name: "Tickets" }] });
+    if (req.method === "GET" && p === "organizers/1/locations") return send(200, { data: [{ id: 4, name: "Dewan" }] });
+    if (req.method === "POST" && p === "events/7/products") return send(201, { data: { id: 12, ...body } });
+    if (req.method === "PATCH" && p === "events/7/event-location") return send(200, { data: body });
     send(404, { message: "tiada: " + p });
   });
 });
@@ -53,7 +57,7 @@ const call = (c, name, args) => c.callTool({ name, arguments: args });
 const c = await connect();
 const names = (await c.listTools()).tools.map((t) => t.name).sort();
 console.log("tools:", names.join(", "));
-assert.equal(names.length, 12);
+assert.equal(names.length, 16);
 
 // baca + pengesahan
 let r = await call(c, "list_events", { query: "ab", per_page: 5 });
@@ -97,6 +101,29 @@ assert.equal(calls.at(-1).m, "PATCH"); assert.deepEqual(calls.at(-1).body, { sta
 r = await call(c, "update_attendee", { event_id: 7, attendee_id: 3, notes: "VIP" });
 assert.equal(calls.at(-1).m, "PUT");
 assert.deepEqual(calls.at(-1).body, { email: "a@x.my", first_name: "Ali", last_name: "B", product_id: 11, product_price_id: 22, notes: "VIP" });
+// tiket
+r = await call(c, "list_product_categories", { event_id: 7 });
+assert.ok(!r.isError && text(r).includes("Tickets"));
+r = await call(c, "create_ticket", { event_id: 7, product_category_id: 5, title: "Early Bird", price: 0, quantity: 15 });
+assert.ok(!r.isError, text(r));
+assert.deepEqual(calls.at(-1).body, { product_category_id: 5, title: "Early Bird", is_hidden: false, tax_and_fee_ids: [], type: "FREE", product_type: "TICKET", initial_quantity_available: 15, prices: [{ price: 0 }] });
+r = await call(c, "create_ticket", { event_id: 7, product_category_id: 5, title: "Biasa", price: 49.9 });
+assert.equal(calls.at(-1).body.type, "PAID"); assert.equal(calls.at(-1).body.initial_quantity_available, null);
+assert.deepEqual(calls.at(-1).body.prices, [{ price: 49.9 }]);
+
+// lokasi
+r = await call(c, "list_locations", { organizer_id: 1 });
+assert.ok(!r.isError && text(r).includes("Dewan"));
+r = await call(c, "set_event_location", { event_id: 7, type: "ONLINE", online_event_connection_details: "https://zoom.us/j/123" });
+assert.equal(calls.at(-1).m, "PATCH"); assert.deepEqual(calls.at(-1).body, { event_location: { type: "ONLINE", online_event_connection_details: "https://zoom.us/j/123" } });
+r = await call(c, "set_event_location", { event_id: 7, type: "IN_PERSON", location_id: 4 });
+assert.deepEqual(calls.at(-1).body, { event_location: { type: "IN_PERSON", location_id: 4 } });
+r = await call(c, "set_event_location", { event_id: 7, type: "CLEAR" });
+assert.deepEqual(calls.at(-1).body, { clear_event_location: true });
+const n = calls.length;
+r = await call(c, "set_event_location", { event_id: 7, type: "ONLINE" });
+assert.ok(r.isError && calls.length === n, "ONLINE tanpa butiran tidak boleh sampai ke API");
+
 r = await call(c, "get_attendee", { event_id: 7, attendee_id: 99 });
 assert.ok(r.isError && text(r).includes("404"));
 await c.close();
@@ -105,7 +132,7 @@ await c.close();
 const ro = await connect({ COURSIFY_READ_ONLY: "true" });
 const roNames = (await ro.listTools()).tools.map((t) => t.name).sort();
 console.log("baca sahaja:", roNames.join(", "));
-assert.equal(roNames.length, 6);
+assert.equal(roNames.length, 8);
 assert.ok(!roNames.some((n) => /create|update|delete|set_/.test(n)));
 await ro.close();
 

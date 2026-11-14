@@ -10,10 +10,14 @@ Setiap ahli pasukan guna akaun Coursify masing-masing, jadi tiada kongsi kata la
 | `list_organizers` | Senarai organizer (untuk `organizer_id`) | baca |
 | `list_events`, `get_event` | Senarai / butiran event | baca |
 | `list_products` | Tiket bagi event (untuk `product_id`) | baca |
+| `list_product_categories` | Kategori tiket (untuk `product_category_id`) | baca |
+| `list_locations` | Lokasi fizikal organizer (untuk `location_id`) | baca |
 | `list_attendees`, `get_attendee` | Senarai / butiran peserta | baca |
 | `create_event`, `update_event` | Cipta / kemas kini event | tulis |
 | `set_event_status` | DRAFT / LIVE / ARCHIVED | tulis |
 | `delete_event` | Padam event, **perlu `confirm: true`** | tulis |
+| `create_ticket` | Cipta tiket harga tunggal (`price: 0` = percuma) | tulis |
+| `set_event_location` | Lokasi ONLINE (pautan Zoom), IN_PERSON atau CLEAR | tulis |
 | `create_attendee` | Tambah peserta (tiada e-mel dihantar melainkan diminta) | tulis |
 | `update_attendee` | Ubah nama/e-mel/tiket; `status: CANCELLED` untuk batal | tulis |
 
@@ -73,5 +77,5 @@ Fail `.mcp.json` di akar repo mendaftarkan `coursify` secara automatik. Ia pasan
 ## Had yang diketahui
 
 - Belum diuji terhadap API Coursify sebenar (ujian guna mock). Format tarikh (`start_date`), penapis `list_*` dan medan wajib `create_event` ikut peraturan validasi Hi.Events; ralat API dipaparkan sebagaimana adanya supaya mudah dibetulkan.
-- Belum ada: `duplicate_event`, kejadian berulang (occurrences), order/bayaran, check-in, eksport.
+- Belum ada: tiket berperingkat/derma, kemas kini atau padam tiket, `duplicate_event`, kejadian berulang (occurrences), order/bayaran, check-in, eksport, gambar event.
 - Berjalan setempat (stdio). Versi dihoskan (HTTP) belum ada.

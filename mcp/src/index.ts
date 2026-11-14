@@ -95,6 +95,28 @@ server.registerTool(
 );
 
 server.registerTool(
+  "list_product_categories",
+  {
+    title: "Senarai kategori tiket",
+    description: "Senaraikan kategori tiket bagi satu event. Perlu untuk product_category_id semasa mencipta tiket.",
+    inputSchema: { event_id: id },
+    annotations: { readOnlyHint: true },
+  },
+  run(async (a: { event_id: number }) => client.request("GET", `events/${a.event_id}/product-categories`)),
+);
+
+server.registerTool(
+  "list_locations",
+  {
+    title: "Senarai lokasi organizer",
+    description: "Senaraikan lokasi fizikal yang disimpan bagi satu organizer. Perlu untuk location_id bagi event hadir sendiri.",
+    inputSchema: { organizer_id: id },
+    annotations: { readOnlyHint: true },
+  },
+  run(async (a: { organizer_id: number }) => client.request("GET", `organizers/${a.organizer_id}/locations`)),
+);
+
+server.registerTool(
   "list_attendees",
   {
     title: "Senarai peserta",
@@ -270,6 +292,71 @@ if (!client.readOnly) {
         });
       }
       return result ?? { message: "Tiada medan untuk dikemas kini." };
+    }),
+  );
+
+  server.registerTool(
+    "create_ticket",
+    {
+      title: "Cipta tiket",
+      description:
+        "Cipta satu jenis tiket (harga tunggal) pada event. price=0 menghasilkan tiket PERCUMA, selain itu BERBAYAR. Perlu product_category_id (dari list_product_categories). Tiket berperingkat (tiered) dan derma belum disokong.",
+      inputSchema: {
+        event_id: id,
+        product_category_id: id,
+        title: z.string().min(1).max(255),
+        price: z.number().min(0).describe("Harga; 0 = percuma"),
+        quantity: z.number().int().min(0).optional().describe("Bilangan tempat; kosongkan untuk tanpa had"),
+        description: z.string().optional(),
+        min_per_order: z.number().int().min(1).optional(),
+        max_per_order: z.number().int().min(1).optional(),
+        sale_start_date: z.string().optional().describe("Mula jualan, contoh 2026-12-01 09:00:00"),
+        sale_end_date: z.string().optional().describe("Tamat jualan"),
+        is_hidden: z.boolean().default(false),
+        tax_and_fee_ids: z.array(id).default([]),
+      },
+    },
+    run(async (a: Record<string, unknown> & { event_id: number; price: number; quantity?: number }) => {
+      const { event_id, price, quantity, ...rest } = a;
+      return client.request("POST", `events/${event_id}/products`, {
+        body: {
+          ...rest,
+          type: price === 0 ? "FREE" : "PAID",
+          product_type: "TICKET",
+          initial_quantity_available: quantity ?? null,
+          prices: [{ price }],
+        },
+      });
+    }),
+  );
+
+  server.registerTool(
+    "set_event_location",
+    {
+      title: "Tetapkan lokasi event",
+      description:
+        "Tetapkan lokasi event. ONLINE: beri online_event_connection_details (contoh pautan Zoom). IN_PERSON: beri location_id (dari list_locations). CLEAR: buang lokasi.",
+      inputSchema: {
+        event_id: id,
+        type: z.enum(["ONLINE", "IN_PERSON", "CLEAR"]),
+        online_event_connection_details: z.string().max(10000).optional(),
+        location_id: id.optional(),
+      },
+      annotations: { idempotentHint: true },
+    },
+    run(async (a: { event_id: number; type: string; online_event_connection_details?: string; location_id?: number }) => {
+      const { event_id, type, online_event_connection_details, location_id } = a;
+      let body: Record<string, unknown>;
+      if (type === "CLEAR") {
+        body = { clear_event_location: true };
+      } else if (type === "ONLINE") {
+        if (!online_event_connection_details) throw new Error("ONLINE perlu online_event_connection_details (cth pautan Zoom).");
+        body = { event_location: { type, online_event_connection_details } };
+      } else {
+        if (!location_id) throw new Error("IN_PERSON perlu location_id (guna list_locations).");
+        body = { event_location: { type, location_id } };
+      }
+      return client.request("PATCH", `events/${event_id}/event-location`, { body });
     }),
   );
 }

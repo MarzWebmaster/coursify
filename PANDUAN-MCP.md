@@ -71,6 +71,8 @@ Nota: fail ini menyimpan kata laluan sebagai teks biasa. Jangan hantar atau muat
 | Lihat senarai / butiran event | ya | ya |
 | Lihat peserta dan tiket | ya | ya |
 | Cipta atau ubah event | tidak | ya |
+| Cipta tiket (harga tunggal atau percuma) | tidak | ya |
+| Tetapkan lokasi atau pautan Zoom | tidak | ya |
 | Terbit / arkib event | tidak | ya |
 | Tambah atau ubah peserta, batal peserta | tidak | ya |
 | Padam event | tidak | ya (perlu pengesahan jelas) |
